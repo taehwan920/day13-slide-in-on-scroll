@@ -150,7 +150,7 @@
     </div>
 
     <script>
-        function debounce(func, wait = 20, immediate = true) {
+        function debounce(func, wait = 15, immediate = true) {
             var timeout;
             return function () {
                 var context = this, args = arguments;
@@ -164,6 +164,27 @@
                 if (callNow) func.apply(context, args);
             };
         }
+        // debounce란 같은 이벤트가 여러번 실행돼도 각 실행되는 이벤트마다 함수를 실행하는게 아니라 한번 이벤트가 실행되면 어느 일정 시간동안은 같은 이벤트가 들어와도 무시해버리는 개념?
+
+        const sliderImages = document.querySelectorAll('.slide-in');
+
+        const checkslide = (e) => {
+            sliderImages.forEach(slideImage => {
+                // halfway through the image 이미지 높이 절반 위치 찾는 변수
+                const slideInAt = (window.scrollY + window.innerHeight) - slideImage.height / 2;
+                // bottom of the image
+                const imageBottom = slideImage.offsetTop + slideImage.height;
+                const isHalfShown = slideInAt > slideImage.offsetTop;
+                const isNotScrolledPast = window.scrollY < imageBottom;
+                if (isHalfShown && isNotScrolledPast) {
+                    slideImage.classList.add('active');
+                } else {
+                    slideImage.classList.remove('active');
+                }
+            });
+        }
+
+        window.addEventListener('scroll', debounce(checkslide));
 
     </script>
 
